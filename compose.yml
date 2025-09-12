@@ -1,0 +1,14 @@
+services:
+
+  astro:
+    image: node:22-alpine
+    ports:
+      - 127.0.0.1:4321:4321
+    environment:
+      - YARN_CACHE_FOLDER=/home/node/cache/yarn
+    volumes:
+      - ${PWD}/:/app:cached
+    working_dir: /app
+    user: node
+    stdin_open: true
+    tty: true

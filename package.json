@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev --host",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "test": "vitest",
+    "guide": "node src/tv/app.js"
+  },
+  "dependencies": {
+    "astro": "^5.13.7",
+    "xmldom": "^0.6.0",
+    "xpath": "^0.0.34"
+  },
+  "devDependencies": {
+    "vitest": "^3.2.4"
+  }
+}

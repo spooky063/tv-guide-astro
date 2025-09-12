@@ -1,0 +1,55 @@
+<tv>
+    <programme start="20250901011000 +0200" stop="20250901060000 +0200" channel="France2.fr">
+        <title lang="fr">Programmes de la nuit</title>
+        <sub-title lang="fr">Que de bonheur</sub-title>
+        <desc lang="fr">Le résumé n'est pas disponible</desc>
+        <category lang="fr">XY</category>
+        <category lang="fr">Programme indéterminé</category>
+        <icon src="https://img.bouygtel.fr/CMS/images/EBE64969228A4E87CCB86326164FE0B7.jpg" />
+        <rating system="CSA">
+            <value>Tout public</value>
+        </rating>
+    </programme>
+    <programme start="20250901065500 +0200" stop="20250901100000 +0200" channel="TF1.fr">
+        <title lang="fr">Bonjour ! La Matinale TF1</title>
+        <desc lang="fr">Le résumé n'est pas disponible</desc>
+        <credits>
+            <director>Adrien Gindre</director>
+            <actor>Jean-Marie Bagayoko</actor>
+            <actor>Hélène Mannarino</actor>
+            <actor>Vincent Valinducq</actor>
+            <adapter>Abby Knight</adapter>
+            <producer>Joseph Wilka</producer>
+            <guest>Garance Pardigon</guest>
+            <guest>Laurent Mariotte</guest>
+            <guest>Karima Charni</guest>
+            <guest>Ange Noiret</guest>
+            <guest>Bruce Toussaint</guest>
+            <guest>Anaïs Grangerac</guest>
+            <guest>Maud Descamps</guest>
+            <guest>Benjamin Muller</guest>
+            <guest>Christophe Beaugrand</guest>
+            <composer>David Bateman</composer>
+        </credits>
+        <category lang="fr">Magazine</category>
+        <category lang="fr">Magazine d'actualité</category>
+        <icon src="https://img.bouygtel.fr/CMS/images/1B2F94300FB0A57F0928694D142DD991.jpg" />
+        <rating system="CSA">
+            <value>Tout public</value>
+        </rating>
+    </programme>
+    <programme start="20250901173000 +0200" stop="20250901180000 +0200" channel="TF1.fr">
+        <title lang="fr">Familles nombreuses : la vie en XXL</title>
+        <sub-title lang="fr">La disparition de Noah Jefferson</sub-title>
+        <desc lang="fr">Le résumé n'est pas disponible</desc>
+        <category lang="fr">XY</category>
+        <category lang="fr">Téléréalité</category>
+        <icon src="https://img.bouygtel.fr/CMS/images/0CBCF4884996A3C3C0CFF35863F4F383.jpg" />
+        <episode-num system="xmltv_ns">8.0.</episode-num>
+        <rating system="CSA">
+            <value>-12</value>
+            <icon
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Moins12.svg/200px-Moins12.svg.png" />
+        </rating>
+    </programme>
+</tv>
