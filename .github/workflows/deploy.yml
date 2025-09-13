@@ -22,10 +22,10 @@ jobs:
         uses: actions/checkout@v4
       - name: Install, build, and upload your site
         uses: withastro/action@v3
-        with:
-          path: .
-          node-version: 22
-          package-manager: yarn@1.22.22
+        # with:
+        #   path: .
+        #   node-version: 22
+        #   package-manager: yarn@1.22.22
 
   deploy:
     needs: build
