@@ -2,13 +2,14 @@
   "name": "app",
   "type": "module",
   "version": "0.0.1",
+  "license": "MIT",
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest",
-    "guide": "node src/tv/app.js"
+    "generate-json": "node src/tv/app.js"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.13",

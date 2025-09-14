@@ -3,9 +3,9 @@ import { GetProgramsUseCase } from "./application/GetProgramsUseCase.js";
 import { JsonProgramWriter } from "./infrastructure/JsonProgramWriter.js";
 import { XmlTvDownloader } from "./infrastructure/XmlTvDownloader.js";
 
-const url = "https://xmltvfr.fr/xmltv/xmltv_tnt.xml";
+const url = "https://xmltvfr.fr/xmltv/xmltv_tnt.xml.gz";
 const downloader = new XmlTvDownloader();
-const xmlFile = await downloader.downloadToFile(url, "./var/downloads");
+const xmlFile = await downloader.downloadToFile(url, "./var/downloads/xmltv_tnt.xml");
 
 const repo = new XmlTvProgramRepository(xmlFile);
 const useCase = new GetProgramsUseCase(repo);
