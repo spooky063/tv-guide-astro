@@ -1,6 +1,7 @@
 import fs from "fs";
 import zlib from "zlib";
 import { Readable } from "stream";
+import path from "path";
 
 export class XmlTvDownloader {
   constructor(fetchFn = fetch) {
@@ -20,6 +21,7 @@ export class XmlTvDownloader {
 
     const remoteDate = new Date(lastModified);
 
+    fs.mkdirSync(path.dirname(outputPath), { recursive: true });
     if (fs.existsSync(outputPath)) {
       const localStat = fs.statSync(outputPath);
       const localDate = localStat.mtime;
