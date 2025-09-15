@@ -42,6 +42,7 @@ describe("Downloader", () => {
 
     it("should return false if local file is newer or equal", async () => {
         const now = new Date();
+
         vi.spyOn(fs, "existsSync").mockReturnValue(true);
         vi.spyOn(fs, "statSync").mockReturnValue({ mtime: now });
 

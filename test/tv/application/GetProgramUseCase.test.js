@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, test } from 'vitest';
 import { GetProgramsUseCase } from '../../../src/tv/application/GetProgramsUseCase';
 import { Program } from '../../../src/tv/domain/Program';
+import { Day } from '../../../src/tv/domain/Day';
 
 describe("Get prime time programs", () => {
     let fakePrograms;
@@ -38,7 +39,7 @@ describe("Get prime time programs", () => {
     });
 
     test.each([
-        { excludeChannels: ["TF1.fr"] , count: 3},
+        { excludeChannels: ["TF1.fr"] , count: 2},
         { excludeChannels: ["M6.fr"] , count: 1},
     ])(
         "get $count programs for program without $excludeChannels",
@@ -78,6 +79,34 @@ describe("Get prime time programs", () => {
             includeChannels: ["TF1.fr"],
             timeRange: { start: "20:55", end: "00:00" }
         });
+        expect(result).toHaveLength(1);
+    });
+
+    it('should get prime time programs for TF1.fr for day 2025-09-12', async () => {
+        const result = await useCase.execute({
+            includeChannels: ["TF1.fr"],
+            day: new Day("2025-09-12")
+        });
+
+        expect(result).toHaveLength(0);
+    });
+
+    it('should get prime time programs for TF1.fr for day 2025-09-11', async () => {
+        fakePrograms.push(
+            new Program({
+                channel: "TF1.fr",
+                start: new Date("2025-09-11T21:00:00.000Z"),
+                stop: new Date("2025-09-11T23:35:00.000Z"),
+                title: "Doctor Strange"
+            })
+        );
+
+        const result = await useCase.execute({
+            includeChannels: ["TF1.fr"],
+            day: new Day("2025-09-11"),
+            timeRange: { start: "21:00", end: "00:00" }
+        });
+
         expect(result).toHaveLength(1);
     });
 

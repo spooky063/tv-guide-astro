@@ -1,17 +1,44 @@
 ---
+import type { Program as program } from '../tv/domain/Program';
+
 interface Props {
-  program: Program;
+  program: program;
 }
 
-interface Program {
-  title: string;
-  description: string;
-}
+const { channel, start, stop, title, subTitle, description, categories, image, rating, tvShow } = Astro.props.program;
 
-const { title, description } = Astro.props.program;
+const startDate = start instanceof Date ? start : new Date(start);
+const startFormatted = `${String(startDate.getHours()).padStart(2, "0")}:${String(startDate.getMinutes()).padStart(2, "0")}`;
+
+const stopDate = start instanceof Date ? stop : new Date(stop);
+const stopFormatted = `${String(stopDate.getHours()).padStart(2, "0")}:${String(stopDate.getMinutes()).padStart(2, "0")}`;
+
+const d = description?.split(/\s+/) ?? [];
+const shortDescription = d.slice(0, 15).join(" ") + "...";
 ---
 
-<div class="flex1 mb-2">
-    <h2 class="text-2xl font-bold text-cyan-800">{title}</h2>
-    <p class="text-gray-400 text-sm">{description}</p>
+<div class="flex1 mb-3">
+  <img src={image} alt={title} class="w-[150px]" />
+  <h2 class="text-2xl font-bold">{title}</h2>
+  <div class="text-sm">
+    <span>Catégories : </span>
+    {categories?.map((category) => (
+      <span>{category}</span>
+    ))}
+  </div>
+  <div class="text-sm">
+    <span>{channel}</span> -
+    <span>{startFormatted} -> {stopFormatted}</span>
+    {tvShow?.season && tvShow?.episode ?
+      <span>S{tvShow?.season}E{tvShow?.episode}</span> : ''
+    }
+  </div>
+  <p class="text-sm text-muted">{subTitle}</p>
+  <p class="text-sm text-muted">
+    <span>Évaluation : </span>
+      <span>{rating?.value}</span>
+      <span>{rating?.system}</span>
+    </span>
+  </p>
+  <p class="text-sm text-muted">{shortDescription}</p>
 </div>

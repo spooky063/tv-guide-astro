@@ -1,14 +1,18 @@
-import fs from "fs";
-import zlib from "zlib";
+import * as fs from "fs";
+import * as zlib from "zlib";
+import * as path from "path";
 import { Readable } from "stream";
-import path from "path";
+
+type FetchFn = (input: RequestInfo, init?: RequestInit) => Promise<Response>;
 
 export class XmlTvDownloader {
+  private fetchFn: FetchFn;
+
   constructor(fetchFn = fetch) {
     this.fetchFn = fetchFn;
   }
 
-  async shouldDownload(url, outputPath) {
+  async shouldDownload(url: string, outputPath: string): Promise<boolean> {
     const headRes = await fetch(url, { method: "HEAD" });
     if (!headRes.ok) {
       throw new Error(`HEAD request failed: ${headRes.status}`);
@@ -34,7 +38,7 @@ export class XmlTvDownloader {
     return true;
   }
 
-  async downloadToFile(url, outputPath) {
+  async downloadToFile(url: string, outputPath: string): Promise<string> {
     if (!(await this.shouldDownload(url, outputPath))) {
       return outputPath;
     }
@@ -56,9 +60,9 @@ export class XmlTvDownloader {
         outStream.on("error", reject);
         outStream.on("finish", () => resolve(outputPath));
 
-        const nodeStream =
-          typeof inStream.getReader === "function"
-            ? Readable.fromWeb(inStream)
+        const nodeStream: any =
+          typeof (inStream as ReadableStream).getReader === "function"
+            ? Readable.fromWeb(inStream as any)
             : inStream;
 
         nodeStream.pipe(gunzip).pipe(outStream);

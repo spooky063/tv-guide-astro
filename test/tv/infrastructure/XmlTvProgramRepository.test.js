@@ -8,10 +8,10 @@ const fakePrograms = path.resolve(__dirname, "../stub/fakeCSVPrograms.xml");
 
 describe("Get programs", () => {
 
-    it("should get all programs", () => {
+    it("should get all programs", async () => {
         const repository = new XmlTvProgramRepository(fakePrograms);
 
-        const programs = repository.findAll();
+        const programs = await repository.findAll();
 
         expect(programs).toHaveLength(3);
 
@@ -31,10 +31,10 @@ describe("Get programs", () => {
         expect(programs[0].rating.value).toBe("Tout public");
     });
 
-    it("should get all programs with tv show", () => {
+    it("should get all programs with tv show", async () => {
         const repository = new XmlTvProgramRepository(fakePrograms);
 
-        const programs = repository.findAll();
+        const programs = await repository.findAll();
 
         expect(programs).toHaveLength(3);
 
