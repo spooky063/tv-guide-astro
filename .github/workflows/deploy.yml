@@ -26,12 +26,18 @@ jobs:
           cache: "yarn"
 
       - name: Install
-        run: yarn install --frozen-lockfile
+        shell: bash
+        working-directory: "."
+        run: yarn install
 
       - name: Generate JSON
+        shell: bash
+        working-directory: "."
         run: yarn run generate-json
 
       - name: Build
+        shell: bash
+        working-directory: "."
         run: yarn run build
 
       - name: Upload Pages Artifact
