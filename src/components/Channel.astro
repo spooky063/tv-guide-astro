@@ -1,0 +1,22 @@
+---
+import type { Channel as ChannelProps } from '../tv/domain/Channel';
+import Program from './Program.astro';
+
+interface Props {
+  channel: ChannelProps;
+}
+
+const { id, name, icon, programs } = Astro.props.channel;
+---
+
+<div class="grid grid-cols-[60px_1fr] gap-4">
+    <div>
+        <img src={icon} alt={name} class="w-12 h-7 object-contain" />
+        <div class="text-sm">{id}</div>
+    </div>
+    <div class="grid auto-cols-[260px] grid-flow-col gap-2">
+        {programs?.map((program) => {
+            return <Program program={program} count={program.length} />
+        })}
+    </div>
+</div>

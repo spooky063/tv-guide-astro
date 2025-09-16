@@ -1,7 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Programs from '../assets/programs.json';
-import Program from '../components/Program.astro';
+import Channels from '../assets/programs.json';
+import Channel from '../components/Channel.astro';
 ---
 
 <Layout>
@@ -9,8 +9,8 @@ import Program from '../components/Program.astro';
 		<h1 class="text-3xl font-bold mb-4">Guide TV</h1>
 
 		<div>
-			{Programs.map(program => (
-				<Program program={program} />
+			{Channels.map(channel => (
+				<Channel channel={channel} />
 			))}
 		</div>
 	</main>

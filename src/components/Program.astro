@@ -1,44 +1,54 @@
 ---
-import type { Program as program } from '../tv/domain/Program';
+import type { Program as programProps } from '../tv/domain/Program';
 
 interface Props {
-  program: program;
+  program: programProps[];
+  count: number;
 }
 
-const { channel, start, stop, title, subTitle, description, categories, image, rating, tvShow } = Astro.props.program;
+const { start, stop, title, subTitle, description, categories, image, rating, tvShow } = Astro.props.program[0];
+const count = Astro.props.count;
 
-const startDate = start instanceof Date ? start : new Date(start);
-const startFormatted = `${String(startDate.getHours()).padStart(2, "0")}:${String(startDate.getMinutes()).padStart(2, "0")}`;
+function formatDateHours(date: Date): string {
+    const d = date instanceof Date ? date : new Date(date);
+    return `${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+}
 
-const stopDate = start instanceof Date ? stop : new Date(stop);
-const stopFormatted = `${String(stopDate.getHours()).padStart(2, "0")}:${String(stopDate.getMinutes()).padStart(2, "0")}`;
+function timeOfProgram(startDate: Date, stopDate: Date): string {
+    const start = startDate instanceof Date ? startDate : new Date(startDate);
+    const stop = stopDate instanceof Date ? stopDate : new Date(stopDate);
 
-const d = description?.split(/\s+/) ?? [];
-const shortDescription = d.slice(0, 15).join(" ") + "...";
+    const diffInMinutes = Math.round((stop - start) / 60000);
+    const hours = Math.floor(diffInMinutes / 60);
+    const minutes = diffInMinutes % 60;
+
+    if (hours === 0) {
+        return `${minutes} min`;
+    } else if (minutes === 0) {
+        return `${hours}h`;
+    } else {
+        return `${hours}h${minutes.toString().padStart(2, "0")}`;
+    }
+}
 ---
 
-<div class="flex1 mb-3">
-  <img src={image} alt={title} class="w-[150px]" />
-  <h2 class="text-2xl font-bold">{title}</h2>
-  <div class="text-sm">
-    <span>Catégories : </span>
-    {categories?.map((category) => (
-      <span>{category}</span>
-    ))}
-  </div>
-  <div class="text-sm">
-    <span>{channel}</span> -
-    <span>{startFormatted} -> {stopFormatted}</span>
-    {tvShow?.season && tvShow?.episode ?
-      <span>S{tvShow?.season}E{tvShow?.episode}</span> : ''
-    }
-  </div>
-  <p class="text-sm text-muted">{subTitle}</p>
-  <p class="text-sm text-muted">
-    <span>Évaluation : </span>
-      <span>{rating?.value}</span>
-      <span>{rating?.system}</span>
-    </span>
-  </p>
-  <p class="text-sm text-muted">{shortDescription}</p>
+<div class="flex mb-3 justify-between p-2">
+    <div class="order-2">
+        <img src={image} alt={title} class="w-[65px] h-[90px] object-cover rounded-md" />
+    </div>
+    <div class="order-1">
+        <span class="text-sm font-bold">{formatDateHours(start)}</span>
+        <h3 class="text-1xl font-bold">{title}</h3>
+        {count > 1 ? <span class="text-sm">{count} épisodes</span> : null}
+        {tvShow?.season && tvShow?.episode ?
+            <span class="text-sm">S{tvShow?.season}E{tvShow?.episode}</span> : ''
+        }
+        {subTitle ? <p class="text-sm text-gray-600">{subTitle}</p> : null }
+        <div class="text-sm">
+            {categories?.map((category) => (
+            <span class="bg-gray-100 text-gray-700 text-xs font-medium mr-2 px-1.5 py-1 rounded-full">{category}</span>
+            ))}
+        </div>
+        <div class="text-sm">{timeOfProgram(start, stop)}</div>
+    </div>
 </div>
