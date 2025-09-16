@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { parseDate } from '../../../src/tv/shared/Date';
+import { parseDate } from '../../../src/tv/shared/Date.ts';
 
 describe("Parse date", () => {
 

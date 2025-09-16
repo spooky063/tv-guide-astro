@@ -1,22 +1,23 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import fs from "fs";
-import { XmlTvDownloader } from '../../../src/tv/infrastructure/XmlTvDownloader';
+import * as fs from "fs";
+import { XmlTvDownloader } from '../../../src/tv/infrastructure/XmlTvDownloader.ts';
 
 describe("Downloader", () => {
 
     const url = "https://example.com/file.xml.xz";
     const outputPath = "./downloads/file.xml";
-    let downloader;
+    let downloader: XmlTvDownloader;
 
     beforeEach(() => {
         vi.resetAllMocks();
+        vi.mock("fs", { spy: true});
 
         downloader = new XmlTvDownloader();
     });
 
     it("should return true if file does not exist", async () => {
         vi.spyOn(fs, "existsSync").mockReturnValue(false);
-        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: new Date() });
+        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: new Date() }  as unknown as fs.Stats);
 
         global.fetch = vi.fn().mockResolvedValue({
             ok: true,
@@ -29,7 +30,7 @@ describe("Downloader", () => {
 
     it("should return true if no Last-Modified header", async () => {
         vi.spyOn(fs, "existsSync").mockReturnValue(true);
-        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: new Date() });
+        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: new Date() } as unknown as fs.Stats);
 
         global.fetch = vi.fn().mockResolvedValue({
             ok: true,
@@ -44,7 +45,7 @@ describe("Downloader", () => {
         const now = new Date();
 
         vi.spyOn(fs, "existsSync").mockReturnValue(true);
-        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: now });
+        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: now } as unknown as fs.Stats);
 
         global.fetch = vi.fn().mockResolvedValue({
             ok: true,
@@ -60,7 +61,7 @@ describe("Downloader", () => {
         const remoteDate = new Date("2025-09-11T00:00:00Z");
 
         vi.spyOn(fs, "existsSync").mockReturnValue(true);
-        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: localDate });
+        vi.spyOn(fs, "statSync").mockReturnValue({ mtime: localDate } as unknown as fs.Stats);
 
         global.fetch = vi.fn().mockResolvedValue({
             ok: true,

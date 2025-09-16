@@ -1,0 +1,26 @@
+<tv>
+  <channel id="TF1.fr">
+    <display-name>TF1</display-name>
+    <icon src="https://www.teleboy.ch/assets/stations/308/icon320_light.png?v2023_48_0"/>
+  </channel>
+  <channel id="France2.fr">
+    <display-name>France 2</display-name>
+    <icon src="https://www.teleboy.ch/assets/stations/342/icon320_light.png?v2023_48_0"/>
+  </channel>
+  <channel id="France3.fr">
+    <display-name>France 3</display-name>
+    <icon src="https://www.teleboy.ch/assets/stations/58/icon320_light.png?v2023_48_0"/>
+  </channel>
+  <channel id="CanalPlus.fr">
+    <display-name>Canal+</display-name>
+    <icon src="https://focus.telerama.fr/500x500/0000/00/01/clear-34.png"/>
+  </channel>
+  <channel id="France5.fr">
+    <display-name>France 5</display-name>
+    <icon src="https://www.teleboy.ch/assets/stations/80/icon320_light.png?v2023_48_0"/>
+  </channel>
+  <channel id="M6.fr">
+    <display-name>M6</display-name>
+    <icon src="https://www.teleboy.ch/assets/stations/312/icon320_light.png?v2023_48_0"/>
+  </channel>
+</tv>

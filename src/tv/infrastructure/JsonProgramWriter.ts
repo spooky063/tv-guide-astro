@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import path from "path";
-import { Program } from "../domain/Program.ts";
+import type { Channel } from "../domain/Channel.ts";
 
 export class JsonProgramWriter {
   private outputPath: string;
@@ -9,7 +9,7 @@ export class JsonProgramWriter {
     this.outputPath = outputPath;
   }
 
-  save(programs: Program[]): void {
+  save(programs: Channel[]): void {
     const dir = path.dirname(this.outputPath);
 
     fs.mkdirSync(dir, { recursive: true });
