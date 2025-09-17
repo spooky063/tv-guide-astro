@@ -32,23 +32,29 @@ function timeOfProgram(startDate: Date, stopDate: Date): string {
 }
 ---
 
-<div class="flex mb-3 justify-between p-2">
+<div class="flex mb-3 justify-between p-2 bg-gray-100 rounded-lg snap-center">
     <div class="order-2">
-        <img src={image} alt={title} class="w-[65px] h-[90px] object-cover rounded-md" />
+        <object data={image} class="w-[65px] h-[90px] object-cover rounded-md">
+            <img src="https://placehold.co/40x40?text=None" alt="default channel">
+        </object>
     </div>
-    <div class="order-1">
-        <span class="text-sm font-bold">{formatDateHours(start)}</span>
-        <h3 class="text-1xl font-bold">{title}</h3>
-        {count > 1 ? <span class="text-sm">{count} épisodes</span> : null}
-        {tvShow?.season && tvShow?.episode ?
-            <span class="text-sm">S{tvShow?.season}E{tvShow?.episode}</span> : ''
-        }
-        {subTitle ? <p class="text-sm text-gray-600">{subTitle}</p> : null }
-        <div class="text-sm">
-            {categories?.map((category) => (
-            <span class="bg-gray-100 text-gray-700 text-xs font-medium mr-2 px-1.5 py-1 rounded-full">{category}</span>
-            ))}
+    <div class="order-1 flex flex-col">
+        <div class="text-xs font-bold">{formatDateHours(start)}</div>
+        <div class="mb-1">
+            <h2 class="font-medium inline-block">{title}</h2>
+            {tvShow?.season && tvShow?.episode ?
+                <span class="text-xs text-gray-700">/ S{tvShow?.season}E{tvShow?.episode}</span> : ''
+            }
         </div>
-        <div class="text-sm">{timeOfProgram(start, stop)}</div>
+        <div class="text-xs mb-1 text-gray-900">
+            {subTitle ? <p>{subTitle}</p> : null }
+            {count > 1 ? <small>+ {count - 1} épisodes</small> : null}
+        </div>
+        {categories && categories.length > 0 ?
+            <><div class="text-xs mb-1 text-gray-700">
+                {categories[0]}
+            </div></> : null
+        }
+        <div class="text-xs font-bold font-medium">{timeOfProgram(start, stop)}</div>
     </div>
 </div>

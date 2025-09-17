@@ -1,8 +1,11 @@
+@import url('https://rsms.me/inter/inter.css');
 @import "tailwindcss";
 
 @theme {
     --color-background: oklch(0.9851 0 0);
     --color-foreground:  oklch(0.1776 0 0);
+
+    --font-sans: "Inter", sans-serif;
 }
 
 @layer theme {
