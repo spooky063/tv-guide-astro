@@ -16,3 +16,7 @@
         }
     }
 }
+
+#filters .active {
+  @apply text-gray-100 bg-gray-800 border-gray-300;
+}

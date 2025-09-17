@@ -1,17 +1,65 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Channels from '../assets/programs.json';
+import data from '../assets/programs.json';
 import Channel from '../components/Channel.astro';
+import type { ChannelProps } from '../tv/domain/Channel.ts';
+
+const channels = data as unknown as ChannelProps[];
 ---
 
 <Layout>
 	<main class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16">
-		<h1 class="text-3xl font-bold mb-8">Programme TV</h1>
+		<h1 class="text-3xl font-bold mb-6">Programme TV</h1>
+
+		<div id="filters" class="flex gap-3 flex-wrap mb-4">
+			<button class="bg-gray-100 text-gray-800 text-xs rounded-md py-1 px-2 border-gray-700" data-filter="Film">Film</button>
+			<button class="bg-gray-100 text-gray-800 text-xs rounded-md py-1 px-2 border-gray-700" data-filter="Sport">Sport</button>
+			<button class="bg-gray-100 text-gray-800 text-xs rounded-md py-1 px-2 border-gray-700" data-filter="Série">Série</button>
+			<button class="bg-gray-100 text-gray-800 text-xs rounded-md py-1 px-2 border-gray-700" data-filter="Documentaire">Documentaire</button>
+			<button class="bg-gray-100 text-gray-800 text-xs rounded-md py-1 px-2 border-gray-700" data-filter="Magazine">Magazine</button>
+		</div>
 
 		<div>
-			{Channels.map(channel => (
+			{channels.map(channel => (
 				<Channel channel={channel} />
 			))}
 		</div>
 	</main>
+
+	<script>
+		const filters = document.querySelectorAll("#filters *");
+  		const channels = document.querySelectorAll(".channel");
+		let activeFilters: string[] = [];
+
+		filters.forEach(btn => {
+			btn.addEventListener("click", () => {
+				const filter = btn.dataset.filter;
+
+				if (activeFilters.includes(filter)) {
+					activeFilters = activeFilters.filter(f => f !== filter);
+					btn.classList.remove("active");
+				} else {
+					activeFilters.push(filter);
+					btn.classList.add("active");
+				}
+
+				channels.forEach(channel => {
+					const programs = channel.querySelectorAll(".program");
+					let visibleCount = 0;
+
+					programs.forEach(p => {
+					const cats = p.dataset.categories.split(" ");
+					const visible =
+						activeFilters.length === 0 ||
+						activeFilters.some(f => cats.includes(f));
+
+					p.classList.toggle("hidden", !visible);
+					if (visible) visibleCount++;
+					});
+
+					channel.classList.toggle("hidden", visibleCount === 0);
+				});
+			});
+		});
+	</script>
 </Layout>

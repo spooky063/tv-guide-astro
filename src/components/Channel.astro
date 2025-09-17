@@ -1,15 +1,15 @@
 ---
-import type { Channel as ChannelProps } from '../tv/domain/Channel';
+import type { ChannelProps } from '../tv/domain/Channel';
 import Program from './Program.astro';
 
 interface Props {
   channel: ChannelProps;
 }
 
-const { id, name, icon, programs } = Astro.props.channel;
+const { name, icon, programs } = Astro.props.channel;
 ---
 
-<div class="grid grid-cols-[60px_1fr] gap-4 mb-4">
+<div class="grid grid-cols-[60px_1fr] gap-4 mb-4 channel">
     <div class="flex flex-col items-center py-3">
         <object data={icon} class="w-[26px] object-contain mb-4">
             <img src="https://placehold.co/40x40?text=None" alt="default channel">
