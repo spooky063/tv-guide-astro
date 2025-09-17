@@ -48,7 +48,7 @@ function timeOfProgram(startDate: Date, stopDate: Date): string {
         </div>
         <div class="text-xs mb-1 text-gray-900">
             {subTitle ? <p>{subTitle}</p> : null }
-            {count > 1 ? <small>+ {count - 1} épisodes</small> : null}
+            {count > 1 ? <small>+ {count - 1} épisode{count == 2 ? "" : "s"}</small> : null}
         </div>
         {categories && categories.length > 0 ?
             <><div class="text-xs mb-1 text-gray-700">
