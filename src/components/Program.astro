@@ -40,13 +40,10 @@ function timeOfProgram(startDate: Date, stopDate: Date): string {
     </div>
     <div class="order-1 flex flex-col">
         <div class="text-xs font-bold">{formatDateHours(start)}</div>
-        <div class="mb-1">
-            <h2 class="font-medium inline-block">{title}</h2>
-            {tvShow?.season && tvShow?.episode ?
-                <span class="text-xs text-gray-700">/ S{tvShow?.season}E{tvShow?.episode}</span> : ''
-            }
+        <div class="mb-1 mt-[0.275em] leading-[1.125]">
+            <h2 class="font-medium inline-block">{title}&nbsp;{tvShow?.season && tvShow?.episode ? <span class="text-xs text-gray-700">/&nbsp;S{tvShow?.season}E{tvShow?.episode}</span> : ''}</h2>
         </div>
-        <div class="text-xs mb-1 text-gray-900">
+        <div class="text-xs mb-1.5 text-gray-900">
             {subTitle ? <p>{subTitle}</p> : null }
             {count > 1 ? <small>+ {count - 1} épisode{count == 2 ? "" : "s"}</small> : null}
         </div>
