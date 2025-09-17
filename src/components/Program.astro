@@ -4,10 +4,13 @@ import type { Program as programProps } from '../tv/domain/Program';
 interface Props {
   program: programProps[];
   count: number;
+  key: string;
 }
 
 const { start, stop, title, subTitle, description, categories, image, rating, tvShow } = Astro.props.program[0];
+const episodes = Astro.props.program.slice(1);
 const count = Astro.props.count;
+const k = `episode${Astro.props.key}`;
 
 function formatDateHours(date: Date): string {
     const d = date instanceof Date ? date : new Date(date);
@@ -45,7 +48,7 @@ function timeOfProgram(startDate: Date, stopDate: Date): string {
         </div>
         <div class="text-xs mb-1.5 text-gray-900">
             {subTitle ? <p>{subTitle}</p> : null }
-            {count > 1 ? <small>+ {count - 1} épisode{count == 2 ? "" : "s"}</small> : null}
+            {count > 1 ? <button popovertarget={k}>+ {count - 1} épisode{count == 2 ? "" : "s"}</button> : null}
         </div>
         {categories && categories.length > 0 ?
             <><div class="text-xs mb-1 text-gray-700">
@@ -55,3 +58,41 @@ function timeOfProgram(startDate: Date, stopDate: Date): string {
         <div class="text-xs font-medium">{timeOfProgram(start, stop)}</div>
     </div>
 </div>
+
+{episodes.length > 0 ?
+    <dialog id={k} popover>
+        <div class="fixed inset-0 bg-slate-950/50 flex justify-center items-center pointer-events-none transition-opacity duration-300 ease-out z-[9999]">
+            <div class="bg-white rounded-xl shadow-2xl shadow-slate-950/5 border border-slate-200 w-[95%] scale-95">
+            <div class="p-4 pb-2 flex justify-between items-center">
+                <h1 class="text-lg text-slate-800 font-semibold">{title}</h1>
+                <button popovertarget={k} type="button" aria-label="Fermer" class="inline-grid place-items-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none data-[shape=circular]:rounded-full text-sm min-w-[34px] min-h-[34px] rounded-md bg-transparent border-transparent text-slate-200-foreground hover:bg-slate-200/10 hover:border-slate-200/10 shadow-none hover:shadow-none outline-none absolute right-2 top-2">
+                    <svg width="1.5em" height="1.5em" stroke-width="1.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" color="currentColor" class="h-5 w-5"><path d="M6.75827 17.2426L12.0009 12M17.2435 6.75736L12.0009 12M12.0009 12L6.75827 6.75736M12.0009 12L17.2435 17.2426" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </button>
+            </div>
+            <div class="p-4 pt-2 text-slate-600">
+                {episodes.map((episode, index) => {
+                    return (<div class="flex mb-3 justify-between p-2 bg-gray-100 rounded-lg snap-center">
+                        <div class="order-2">
+                            <object data={episode.image} class="w-[65px] h-[90px] object-cover rounded-md">
+                                <img src="https://placehold.co/40x40?text=None" alt="default channel">
+                            </object>
+                        </div>
+                        <div class="order-1 flex flex-col">
+                            <div class="text-xs font-bold">{formatDateHours(episode.start)}</div>
+                            <div class="mb-1 mt-[0.275em] leading-[1.125]">
+                                <h2 class="font-medium inline-block">{episode.title}&nbsp;{episode.tvShow?.season && episode.tvShow?.episode ? <span class="text-xs text-gray-700">/&nbsp;S{episode.tvShow?.season}E{episode.tvShow?.episode}</span> : ''}</h2>
+                            </div>
+                            <div class="text-xs mb-1.5 text-gray-900">{subTitle ? <p>{episode.subTitle}</p> : null }</div>
+                            <div class="text-xs mb-1.5">{episode.description}</div>
+                            <div class="text-xs font-medium">{timeOfProgram(episode.start, episode.stop)}</div>
+                        </div>
+                    </div>);
+                })}
+            </div>
+            <div class="py-1 px-4 flex justify-end gap-2">
+                <button popovertarget={k} type="button" class="inline-flex items-center justify-center border align-middle select-none font-sans font-medium text-center transition-all duration-300 ease-in disabled:opacity-50 disabled:shadow-none disabled:cursor-not-allowed data-[shape=pill]:rounded-full data-[width=full]:w-full focus:shadow-none text-sm rounded-md py-2 px-4 bg-transparent border-transparent text-red-500 hover:bg-red-500/10 hover:border-red-500/10 shadow-none hover:shadow-none outline-none">Fermer</button>
+            </div>
+        </div>
+    </dialog>
+: null
+}

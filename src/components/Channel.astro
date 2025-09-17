@@ -18,8 +18,9 @@ const { sourceId, name, icon, programs } = Astro.props.channel;
         <small class="text-center text-xs text-gray-500 font-light">{name}</small>
     </div>
     <div class="grid auto-cols-[270px] grid-flow-col gap-3 overflow-x-auto snap-x snap-mandatory">
-        {programs?.map((program) => {
-            return <Program program={program} count={program.length} />
+        {programs?.map((program, index) => {
+            const key = `${sourceId}${index+1}`;
+            return <Program program={program} count={program.length} key={key} />
         })}
     </div>
 </div>
