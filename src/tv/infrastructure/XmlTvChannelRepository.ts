@@ -19,8 +19,8 @@ export class XmlTvChannelRepository {
     return channels.map((channel, index) => {
       const c = channel as Element;
 
-      const sourceId = index + 1;
       const id = c.getAttribute("id") ?? "";
+      const sourceId = this.mappedChannelSourceId(id) ?? index + 1;
       const channelName = xpath.select1("string(./display-name)", c) as string;
       const icon = (xpath.select1("./icon", channel) as Element | null)?.getAttribute("src") ?? "";
 
@@ -31,5 +31,32 @@ export class XmlTvChannelRepository {
         icon: icon,
       });
     });
+  }
+
+  mappedChannelSourceId(id: string): number {
+    const mapping: { [id: string]: number } = {
+      "TF1.fr": 1,
+      "France2.fr": 2,
+      "France3.fr": 3,
+      "France4.fr": 4,
+      "France5.fr": 5,
+      "M6.fr": 6,
+      "Arte.fr": 7,
+      "W9.fr": 9,
+      "TMC.fr": 10,
+      "NT1.fr": 11,
+      "Gulli.fr": 12,
+      "CStar.fr": 17,
+      "T18.fr": 18,
+      "NOVO19.fr": 19,
+      "TF1SeriesFilms.fr": 20,
+      "LEquipe21.fr": 21,
+      "6ter.fr": 22,
+      "Numero23.fr": 23,
+      "RMCDecouverte.fr": 24,
+      "Cherie25.fr": 25,
+    };
+
+    return mapping[id] ?? 0;
   }
 }
