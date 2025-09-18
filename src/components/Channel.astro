@@ -1,6 +1,6 @@
 ---
 import type { ChannelProps } from '../tv/domain/Channel';
-import Program from './Program.astro';
+import ProgramList from './ProgramList.astro';
 
 interface Props {
   channel: ChannelProps;
@@ -20,7 +20,7 @@ const { sourceId, name, icon, programs } = Astro.props.channel;
     <div class="grid auto-cols-[270px] grid-flow-col gap-3 overflow-x-auto snap-x snap-mandatory">
         {programs?.map((program, index) => {
             const key = `${sourceId}${index+1}`;
-            return <Program program={program} count={program.length} key={key} />
+            return <ProgramList programs={program} key={key} />
         })}
     </div>
 </div>

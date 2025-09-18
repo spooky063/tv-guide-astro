@@ -1,0 +1,22 @@
+---
+import Program from './Program.astro';
+import type { Program as programProps } from '../tv/domain/Program';
+import DialogProgram from './DialogProgram.astro';
+
+interface Props {
+  programs: programProps[];
+  key: string;
+}
+
+const program = Astro.props.programs[0];
+const count = Astro.props.programs.length;
+const episodes = Astro.props.programs.slice(1);
+const key = Astro.props.key;
+---
+
+<Program program={program} count={count} key={key}>
+    {episodes.length > 0 ?
+        <DialogProgram programs={episodes} title={program.title} key={`episode${key}`} />
+        : null
+    }
+</Program>
