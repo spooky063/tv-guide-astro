@@ -6,13 +6,13 @@ interface Props {
   stop: Date | string;
 }
 
-const progress = getProgress(Astro.props.start, Astro.props.stop, new Date("2025-09-17T22:31:00").getTime());
+const progress = getProgress(Astro.props.start, Astro.props.stop, new Date().getTime());
 ---
 
 {progress > 0 && progress < 100 ?
-    <div class="w-full bg-gray-200 rounded h-1 mt-1.5">
+    <div class="w-full bg-bg-neutral-muted rounded h-1 mt-1.5">
         <div
-            class="h-1 bg-blue-500 rounded transition-all duration-500"
+            class="h-1 bg-fg-accent rounded transition-all duration-500"
             style={`width: ${progress}%`}
         ></div>
     </div>

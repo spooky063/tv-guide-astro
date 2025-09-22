@@ -5,6 +5,18 @@
     --color-background: oklch(0.9851 0 0);
     --color-foreground:  oklch(0.1776 0 0);
 
+    --color-bg-inset: var(--color-bg-default);
+    --color-bg-default: #ffffff;
+    --color-bg-muted: #f6f8fa;
+    --color-fg-default: #1f2328;
+    --color-fg-muted: #59636e;
+    --color-fg-accent: #0969da;
+    --color-button-default-fg: #25292e;
+    --color-button-default-hover: var(--color-bg-muted);
+    --color-border-default: #d1d9e0;
+    --color-border-muted: #d1d9e0b3;
+    --color-bg-neutral-muted: #818b981f;
+
     --font-sans: "Inter", sans-serif;
 }
 
@@ -13,10 +25,22 @@
         :root {
             --color-background: oklch(0.1776 0 0);
             --color-foreground: oklch(0.9851 0 0);
+
+            --color-bg-inset: #010409;
+            --color-bg-default: #0d1117;
+            --color-bg-muted: #151b23;
+            --color-fg-default: #f0f6fc;
+            --color-fg-muted: #9198a1;
+            --color-fg-accent: #0969da;
+            --color-button-default-fg: #f0f6fc;
+            --color-button-default-hover: #262c36;
+            --color-border-default: #3d444d;
+            --color-border-muted: #3d444db3;
+            --color-bg-neutral-muted: #656c7633;
         }
     }
 }
 
 #filters .active {
-  @apply text-gray-100 bg-gray-800 border-gray-300;
+  @apply bg-bg-muted border-fg-accent;
 }
