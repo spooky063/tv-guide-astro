@@ -1,5 +1,5 @@
-import { describe, expect, test } from 'vitest';
-import { parseDate } from '../../../src/tv/shared/Date.ts';
+import { describe, expect, test, it } from 'vitest';
+import { parseDateTime, parseDate } from '../../../src/tv/shared/Date.ts';
 
 describe("Parse date", () => {
 
@@ -10,11 +10,18 @@ describe("Parse date", () => {
     ])(
         "should parse date with timezone UTC",
         (dateString, expectedDateString) => {
-            const date = parseDate(dateString);
+            const date = parseDateTime(dateString);
 
             expect(date).toBeInstanceOf(Date);
             expect(date.toISOString()).toBe(expectedDateString);
         }
     );
+
+    it('should parse date', () => {
+        const date = parseDate("20250911");
+
+        expect(date).toBeInstanceOf(Date);
+        expect(date.toISOString()).toBe("2025-09-11T00:00:00.000Z");
+    });
 
 });

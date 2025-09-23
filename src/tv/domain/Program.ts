@@ -1,5 +1,6 @@
 import type { Rating } from "./Rating.ts";
 import type { TvShow } from "./TvShow.ts";
+import type { Credit, CreditType } from "./Credit.ts";
 
 export interface ProgramProps {
   channel: string;
@@ -9,9 +10,12 @@ export interface ProgramProps {
   subTitle?: string;
   description?: string;
   categories?: string[];
+  date?: Date;
+  country?: string;
   image?: string;
   rating?: Rating;
   tvShow?: TvShow;
+  credits?: Partial<Record<CreditType, Credit[]>>;
 }
 
 export class Program {
@@ -22,12 +26,15 @@ export class Program {
   subTitle?: string;
   description?: string;
   categories?: string[];
+  date?: Date;
+  country?: string;
   image?: string;
   rating?: Rating;
   tvShow?: TvShow;
+  credits?: Partial<Record<CreditType, Credit[]>>;
 
   constructor(props: ProgramProps) {
-    const { channel, start, stop, title, subTitle, description, categories, image, rating, tvShow } = props;
+    const { channel, start, stop, title, subTitle, description, date, country, categories, image, rating, tvShow, credits } = props;
 
     if (!channel) throw new Error("Program must have a channel");
     if (!title) throw new Error("Program must have a title");
@@ -42,8 +49,11 @@ export class Program {
     this.subTitle = subTitle;
     this.description = description;
     this.categories = categories;
+    this.date = date;
+    this.country = country;
     this.image = image;
     this.rating = rating;
     this.tvShow = tvShow;
+    this.credits = credits;
   }
 }

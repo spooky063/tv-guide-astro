@@ -2,9 +2,10 @@ import * as fs from "fs";
 import { DOMParser } from "xmldom";
 import xpath from "xpath";
 import { Program } from "../domain/Program.ts";
-import { parseDate } from "../shared/Date.ts";
+import { parseDateTime, parseDate } from "../shared/Date.ts";
 import { Rating } from "../domain/Rating.ts";
 import { TvShow } from "../domain/TvShow.ts";
+import { Credit, type CreditType } from "../domain/Credit.ts";
 import type { Channel } from "../domain/Channel.ts";
 
 export class XmlTvProgramRepository {
@@ -17,6 +18,8 @@ export class XmlTvProgramRepository {
   findByChannel(channel: Channel): Program[] {
     const content = fs.readFileSync(this.filePath, "utf-8");
     const doc = new DOMParser().parseFromString(content, "text/xml");
+
+    const dn = new Intl.DisplayNames(['fr'], { type: 'region' });
 
     const programs: Node[]  = xpath.select(`//programme[@channel='${channel.id}']`, doc) as Node[];
 
@@ -43,17 +46,33 @@ export class XmlTvProgramRepository {
         }
       }
 
+      const credits: Credit[] = [];
+      const creditNodes = xpath.select("./credits/*", p) as Element[];
+      for (const creditNode of creditNodes) {
+        const creditType = creditNode.tagName.toLowerCase() as CreditType;
+        const name = xpath.select1("string(.)", creditNode) as string;
+        credits.push(new Credit({ creditType, name }));
+      }
+      const creditsGrouped: Partial<Record<CreditType, Credit[]>> = Object.groupBy(credits, ({ creditType }) => creditType as CreditType);
+
+      const date = xpath.select1("string(./date)", p) as string;
+
+      const country = xpath.select1("string(./country)", p) as string;
+
       return new Program({
         channel: p.getAttribute("channel") as string,
-        start: parseDate(p.getAttribute("start") ?? ""),
-        stop: parseDate(p.getAttribute("stop") ?? ""),
-        title: xpath.select1("string(./title)", p) as string,
-        subTitle: xpath.select1("string(./sub-title)", p) as string,
-        description: xpath.select1("string(./desc)", p) as string,
+        start: parseDateTime(p.getAttribute("start") ?? ""),
+        stop: parseDateTime(p.getAttribute("stop") ?? ""),
+        title: xpath.select1("string(./title[@lang='fr'])", p) as string,
+        subTitle: xpath.select1("string(./sub-title[@lang='fr'])", p) as string,
+        description: xpath.select1("string(./desc[@lang='fr'])", p) as string,
         image: (xpath.select1("./icon", p) as Element | null)?.getAttribute("src") ?? undefined,
         categories: (xpath.select("./category", p) as Element[]).map((catNode) => catNode.textContent ?? ""),
+        date: date ? parseDate(date) : undefined,
+        country: country ? dn.of(country) : undefined,
         rating,
         tvShow,
+        credits: creditsGrouped,
       });
     });
   }

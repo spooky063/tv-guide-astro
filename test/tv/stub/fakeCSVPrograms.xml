@@ -11,7 +11,9 @@
         </rating>
     </programme>
     <programme start="20250901065500 +0200" stop="20250901100000 +0200" channel="TF1.fr">
+        <title lang="en">Good Morning ! The morning TF1</title>
         <title lang="fr">Bonjour ! La Matinale TF1</title>
+        <sub-title lang="fr">On repart !</sub-title>
         <desc lang="fr">Le résumé n'est pas disponible</desc>
         <credits>
             <director>Adrien Gindre</director>
@@ -31,9 +33,12 @@
             <guest>Christophe Beaugrand</guest>
             <composer>David Bateman</composer>
         </credits>
+        <date>19901011</date>
+        <country>ES</country>
         <category lang="fr">Magazine</category>
         <category lang="fr">Magazine d'actualité</category>
         <icon src="https://img.bouygtel.fr/CMS/images/1B2F94300FB0A57F0928694D142DD991.jpg" />
+        <episode-num system="xmltv_ns">8.0.</episode-num>
         <rating system="CSA">
             <value>Tout public</value>
         </rating>
