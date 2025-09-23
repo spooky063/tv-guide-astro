@@ -6,8 +6,10 @@ interface Props {
   program: programProps;
   count?: number;
   key?: string;
+  programEndpoint: { startDate: string; endDate: string; };
+  programDate: { startDate: string; endDate: string; }[];
 }
 ---
 
-<ProgramCard program={Astro.props.program} count={Astro.props.count} key={Astro.props.key} />
+<ProgramCard program={Astro.props.program} count={Astro.props.count} key={Astro.props.key} programEndpoint={Astro.props.programEndpoint} programDate={Astro.props.programDate} />
 <slot />

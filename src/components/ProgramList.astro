@@ -8,13 +8,19 @@ interface Props {
   key: string;
 }
 
-const program = Astro.props.programs[0];
+const programs = Astro.props.programs;
+const program = programs[0];
 const count = Astro.props.programs.length;
 const episodes = Astro.props.programs.slice(1);
 const key = Astro.props.key;
+
+const programEndpoint = { startDate: programs[0].start.toString(), endDate: programs[programs.length -1].stop.toString() };
+const programDate = programs.map(program => {
+    return { startDate: program.start.toString(), endDate: program.stop.toString() };
+});
 ---
 
-<Program program={program} count={count} key={key}>
+<Program program={program} count={count} key={key} programEndpoint={programEndpoint} programDate={programDate}>
     {episodes.length > 0 ?
         <DialogProgram programs={episodes} title={program.title} key={`episode${key}`} />
         : null

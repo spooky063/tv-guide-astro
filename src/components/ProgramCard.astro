@@ -2,18 +2,23 @@
 import type { Program as programProps } from '../tv/domain/Program';
 import DialogProgram from './DialogProgram.astro';
 
-import { formatDateHours, timeOfProgram } from '../utils.js';
-import ProgressBar from './preact/ProgressBar.tsx';
+import { formatDateHours, timeOfProgram } from '../utils.ts';
+import { ProgressBarGroup } from './preact/ProgressBar.tsx';
 
 interface Props {
   program: programProps;
   count?: number;
   key?: string;
+  programEndpoint: { startDate: string; endDate: string; };
+  programDate: { startDate: string; endDate: string; }[];
 }
 
 const { start, stop, title, subTitle, categories, image, tvShow } = Astro.props.program;
 const count = Astro.props.count;
 const key = Astro.props.key;
+
+const dateEndpoint = Astro.props.programEndpoint;
+const programDate = Astro.props.programDate;
 ---
 
 <div class="flex mb-3 justify-between p-2 bg-bg-muted rounded-lg snap-center program" data-categories={categories?.join(" ")}>
@@ -21,10 +26,10 @@ const key = Astro.props.key;
         <object data={image} class="w-[65px] h-[90px] object-cover rounded-md">
             <img src="https://placehold.co/65x90?text=No image">
         </object>
-        <ProgressBar client:load startDate={start} endDate={stop} />
+        <ProgressBarGroup client:load dateEndpoint={dateEndpoint} programDate={programDate} />
     </div>
     <div class="order-1 flex flex-col mr-[4px]">
-        <div class="text-xs font-bold"><time datetime={start}>{formatDateHours(start)}</time></div>
+        <div class="text-xs font-bold"><time datetime={start.toString()}>{formatDateHours(start)}</time></div>
         <div class="mb-1 mt-[0.275em] leading-[1.125]">
             <h2 class="font-medium inline-block"><button popovertarget={key} class="text-left">{title}&nbsp;{tvShow?.season && tvShow?.episode ? <span class="text-xs text-fg-muted">/&nbsp;S{tvShow?.season}E{tvShow?.episode}</span> : ''}</h2>
         </div>
