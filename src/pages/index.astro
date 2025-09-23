@@ -1,65 +1,80 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import data from '../assets/programs.json';
-import Channel from '../components/Channel.astro';
-import type { ChannelProps } from '../tv/domain/Channel.ts';
+import Layout from "../layouts/Layout.astro";
+import data from "../assets/programs.json";
+import Channel from "../components/Channel.astro";
+import type { ChannelProps } from "../tv/domain/Channel.ts";
 
 const channels = data as unknown as ChannelProps[];
 ---
 
 <Layout>
-	<main class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16">
-		<h1 class="text-3xl font-bold mb-6">Programme TV</h1>
+  <main
+    class="container relative mx-auto scroll-my-12 overflow-auto p-2 print:p-12 md:p-16"
+  >
+    <h1 class="text-3xl font-bold mb-6">Programme TV</h1>
 
-		<div id="filters" class="flex gap-3 flex-wrap mb-4">
-			<button class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted" data-filter="Film">Film</button>
-			<button class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted" data-filter="Sport">Sport</button>
-			<button class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted" data-filter="Série">Série</button>
-			<button class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted" data-filter="Documentaire">Documentaire</button>
-			<button class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted" data-filter="Magazine">Magazine</button>
-		</div>
+    <div id="filters" class="flex gap-3 flex-wrap mb-4">
+      <button
+        class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted"
+        data-filter="Film">Film</button
+      >
+      <button
+        class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted"
+        data-filter="Sport">Sport</button
+      >
+      <button
+        class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted"
+        data-filter="Série">Série</button
+      >
+      <button
+        class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted"
+        data-filter="Documentaire">Documentaire</button
+      >
+      <button
+        class="bg-bg-default text-xs rounded-md py-1 px-2 border border-border-default hover:bg-bg-muted"
+        data-filter="Magazine">Magazine</button
+      >
+    </div>
 
-		<div>
-			{channels.map(channel => (
-				<Channel channel={channel} />
-			))}
-		</div>
-	</main>
+    <div>
+      {channels.map((channel) => <Channel channel={channel} />)}
+    </div>
+  </main>
 
-	<script>
-		const filters = document.querySelectorAll("#filters *");
-  		const channels = document.querySelectorAll(".channel");
-		let activeFilters: string[] = [];
+  <script>
+    const filters = document.querySelectorAll("#filters *");
+    const channels = document.querySelectorAll(".channel");
+    let activeFilters: string[] = [];
 
-		filters.forEach(btn => {
-			btn.addEventListener("click", () => {
-				const filter = btn.dataset.filter;
+    filters.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const filter = btn.dataset.filter;
 
-				if (activeFilters.includes(filter)) {
-					activeFilters = activeFilters.filter(f => f !== filter);
-					btn.classList.remove("active");
-				} else {
-					activeFilters.push(filter);
-					btn.classList.add("active");
-				}
+        if (activeFilters.includes(filter)) {
+          activeFilters = activeFilters.filter((f) => f !== filter);
+          btn.classList.remove("active");
+        } else {
+          activeFilters.push(filter);
+          btn.classList.add("active");
+        }
 
-				channels.forEach(channel => {
-					const programs = channel.querySelectorAll(".program");
-					let visibleCount = 0;
+        channels.forEach((channel) => {
+          const programs = channel.querySelectorAll(".program");
+          let visibleCount = 0;
 
-					programs.forEach(p => {
-					const cats = p.dataset.categories.split(" ");
-					const visible =
-						activeFilters.length === 0 ||
-						activeFilters.some(f => cats.includes(f));
+          programs.forEach((p) => {
+            const cats = p.dataset.categories.split(" ");
+            const visible =
+              activeFilters.length === 0 ||
+              activeFilters.some((f) => cats.includes(f));
 
-					p.classList.toggle("hidden", !visible);
-					if (visible) visibleCount++;
-					});
+            p.classList.toggle("hidden", !visible);
+            if (visible) visibleCount++;
+          });
 
-					channel.classList.toggle("hidden", visibleCount === 0);
-				});
-			});
-		});
-	</script>
+          channel.classList.toggle("hidden", visibleCount === 0);
+        });
+      });
+    });
+  </script>
 </Layout>

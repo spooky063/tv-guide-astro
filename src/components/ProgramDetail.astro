@@ -1,36 +1,65 @@
 ---
-import type { Program as programProps } from '../tv/domain/Program';
+import type { Program as programProps } from "../tv/domain/Program";
 
-import { formatDateHours, timeOfProgram } from '../utils.ts';
-import { ProgressBar } from './preact/ProgressBar.tsx';
+import { formatDateHours, timeOfProgram } from "../utils.ts";
+import { ProgressBar } from "./preact/ProgressBar.tsx";
 
 interface Props {
   program: programProps;
   title: string;
 }
 
-const { start, stop, categories, description, image, rating, tvShow } = Astro.props.program;
+const { start, stop, categories, description, image, rating, tvShow } =
+  Astro.props.program;
 const title = Astro.props.title;
 ---
 
-<div class="flex mb-3 justify-between p-2 bg-bg-muted rounded-lg snap-center program" data-categories={categories?.join(" ")}>
-    <div class="order-2">
-        <object data={image} class="w-[65px] h-[90px] object-cover rounded-md">
-            <img src="https://placehold.co/65x90?text=No image">
-        </object>
-        <div class="flex items-center gap-0.5 mt-1.5">
-            <ProgressBar client:load startDate={start.toString()} endDate={stop.toString()} />
-        </div>
+<div
+  class="flex mb-3 justify-between p-2 bg-bg-muted rounded-lg snap-center program"
+  data-categories={categories?.join(" ")}
+>
+  <div class="order-2">
+    <object data={image} class="w-[65px] h-[90px] object-cover rounded-md">
+      <img src="https://placehold.co/65x90?text=No image" />
+    </object>
+    <div class="flex items-center gap-0.5 mt-1.5">
+      <ProgressBar
+        client:load
+        startDate={start.toString()}
+        endDate={stop.toString()}
+      />
     </div>
-    <div class="order-1 flex flex-col mr-[4px] text-button-default-fg">
-        <div class="text-xs font-bold"><time datetime={start.toString()}>{formatDateHours(start)}</time></div>
-        <div class="mb-1 mt-[0.275em] leading-[1.125]">
-            <h2 class="font-medium inline-block">{title}&nbsp;{tvShow?.season && tvShow?.episode ? <span class="text-xs text-fg-muted">/&nbsp;S{tvShow?.season}E{tvShow?.episode}</span> : ''}</h2>
-        </div>
-        <div class="mb-2 text-xs font-medium">{timeOfProgram(start, stop)}</div>
-        <div class="mb-3 mr-2 text-xs">{description}</div>
-        <div class="text-xs font-medium ">
-          {rating?.icon ? <object data={rating?.icon} class="w-[15px] h-[15px] object-cover rounded-full"></object> : rating?.value}
-        </div>
+  </div>
+  <div class="order-1 flex flex-col mr-[4px] text-button-default-fg">
+    <div class="text-xs font-bold">
+      <time datetime={start.toString()}>{formatDateHours(start)}</time>
     </div>
+    <div class="mb-1 mt-[0.275em] leading-[1.125]">
+      <h2 class="font-medium inline-block">
+        {title}&nbsp;{
+          tvShow?.season && tvShow?.episode ? (
+            <span class="text-xs text-fg-muted">
+              /&nbsp;S{tvShow?.season}E{tvShow?.episode}
+            </span>
+          ) : (
+            ""
+          )
+        }
+      </h2>
+    </div>
+    <div class="mb-2 text-xs font-medium">{timeOfProgram(start, stop)}</div>
+    <div class="mb-3 mr-2 text-xs">{description}</div>
+    <div class="text-xs font-medium">
+      {
+        rating?.icon ? (
+          <object
+            data={rating?.icon}
+            class="w-[15px] h-[15px] object-cover rounded-full"
+          />
+        ) : (
+          rating?.value
+        )
+      }
+    </div>
+  </div>
 </div>

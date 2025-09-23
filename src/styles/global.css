@@ -2,9 +2,6 @@
 @import "tailwindcss";
 
 @theme {
-    --color-background: oklch(0.9851 0 0);
-    --color-foreground:  oklch(0.1776 0 0);
-
     --color-bg-inset: var(--color-bg-default);
     --color-bg-default: #ffffff;
     --color-bg-muted: #f6f8fa;
@@ -23,9 +20,6 @@
 @layer theme {
     @media (prefers-color-scheme: dark) {
         :root {
-            --color-background: oklch(0.1776 0 0);
-            --color-foreground: oklch(0.9851 0 0);
-
             --color-bg-inset: #010409;
             --color-bg-default: #0d1117;
             --color-bg-muted: #151b23;
@@ -42,5 +36,5 @@
 }
 
 #filters .active {
-  @apply bg-bg-muted border-fg-accent;
+    @apply bg-bg-muted border-fg-accent;
 }

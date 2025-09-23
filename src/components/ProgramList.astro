@@ -1,7 +1,8 @@
 ---
-import Program from './Program.astro';
-import type { Program as programProps } from '../tv/domain/Program';
-import DialogProgram from './DialogProgram.astro';
+import Program from "./Program.astro";
+import type { Program as programProps } from "../tv/domain/Program";
+import DialogProgram from "./DialogProgram.astro";
+import { ProgressBarGroup } from "./preact/ProgressBar";
 
 interface Props {
   programs: programProps[];
@@ -14,15 +15,34 @@ const count = Astro.props.programs.length;
 const episodes = Astro.props.programs.slice(1);
 const key = Astro.props.key;
 
-const programEndpoint = { startDate: programs[0].start.toString(), endDate: programs[programs.length -1].stop.toString() };
-const programDate = programs.map(program => {
-    return { startDate: program.start.toString(), endDate: program.stop.toString() };
+const programEndpoint = {
+  startDate: programs[0].start.toString(),
+  endDate: programs[programs.length - 1].stop.toString(),
+};
+const programDate = programs.map((program) => {
+  return {
+    startDate: program.start.toString(),
+    endDate: program.stop.toString(),
+  };
 });
 ---
 
-<Program program={program} count={count} key={key} programEndpoint={programEndpoint} programDate={programDate}>
-    {episodes.length > 0 ?
-        <DialogProgram programs={episodes} title={program.title} key={`episode${key}`} />
-        : null
-    }
+<Program program={program} count={count} key={key}>
+  <ProgressBarGroup
+    client:load
+    dateEndpoint={programEndpoint}
+    programDate={programDate}
+    slot="progress"
+  />
+
+  {
+    episodes.length > 0 ? (
+      <DialogProgram
+        programs={episodes}
+        title={program.title}
+        key={`episode${key}`}
+        slot="dialog"
+      />
+    ) : null
+  }
 </Program>

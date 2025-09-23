@@ -1,6 +1,6 @@
 ---
-import type { ChannelProps } from '../tv/domain/Channel';
-import ProgramList from './ProgramList.astro';
+import type { ChannelProps } from "../tv/domain/Channel";
+import ProgramList from "./ProgramList.astro";
 
 interface Props {
   channel: ChannelProps;
@@ -10,17 +10,23 @@ const { sourceId, name, icon, programs } = Astro.props.channel;
 ---
 
 <div class="grid grid-cols-[60px_1fr] gap-4 mb-4 channel">
-    <div class="flex flex-col items-center py-3">
-        <p class="flex flex-col items-center text-[10px] text-fg-muted mb-2">N°{sourceId}</p>
-        <object data={icon} class="w-[26px] object-contain mb-4">
-            <img src="https://placehold.co/40x40?text=None">
-        </object>
-        <small class="text-center text-xs text-fg-muted font-light">{name}</small>
-    </div>
-    <div class="grid auto-cols-[270px] grid-flow-col gap-3 overflow-x-auto snap-x snap-mandatory">
-        {programs?.map((program, index) => {
-            const key = `${sourceId}${index+1}`;
-            return <ProgramList programs={program} key={key} />
-        })}
-    </div>
+  <div class="flex flex-col items-center py-3">
+    <p class="flex flex-col items-center text-[10px] text-fg-muted mb-2">
+      N°{sourceId}
+    </p>
+    <object data={icon} class="w-[26px] object-contain mb-4">
+      <img src="https://placehold.co/40x40?text=None" />
+    </object>
+    <small class="text-center text-xs text-fg-muted font-light">{name}</small>
+  </div>
+  <div
+    class="grid auto-cols-[270px] grid-flow-col gap-3 overflow-x-auto snap-x snap-mandatory"
+  >
+    {
+      programs?.map((program, index) => {
+        const key = `${sourceId}${index + 1}`;
+        return <ProgramList programs={program} key={key} />;
+      })
+    }
+  </div>
 </div>
