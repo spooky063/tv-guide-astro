@@ -34,7 +34,3 @@
         }
     }
 }
-
-#filters .active {
-    @apply bg-bg-muted border-fg-accent;
-}
