@@ -75,7 +75,7 @@ const hasMetadatas = date && country ? true : false;
       ) : undefined
     }
 
-    { credits ? (
+    { credits && credits.length > 0 ? (
       <div class="mb-3 mr-2 text-xs">
         <More title={description ? `${description} [...]` : "[...]"}>
           {
