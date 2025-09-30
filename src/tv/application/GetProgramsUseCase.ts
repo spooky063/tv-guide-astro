@@ -1,16 +1,16 @@
 import type { Channel } from "../domain/Channel.ts";
-import { Day } from "../domain/Day.ts";
+import type { DateTimeRange } from "../domain/DateTimeRange.ts";
 import type { Program } from "../domain/Program.ts";
 
-interface TimeRange {
-  start: string;
-  end: string;
+type FilterOptions = {
+  minDuration?: number;
+  excludedTitles?: string[];
 }
 
-interface ExecuteOptions {
+type ExecuteOptions = {
   channel: Channel;
-  day?: Day | null;
-  timeRange?: TimeRange | null;
+  datetimeRange: DateTimeRange;
+  options: FilterOptions;
 }
 
 export class GetProgramsUseCase {
@@ -20,56 +20,46 @@ export class GetProgramsUseCase {
     this.programRepository = programRepository;
   }
 
-  execute(options: ExecuteOptions): Program[][] {
-    const { channel, day = null, timeRange = null } = options;
+  execute(executeOptions: ExecuteOptions): Program[][] {
+    const { channel, datetimeRange, options = {} } = executeOptions;
 
     let programs = this.programRepository.findByChannel(channel);
 
-    if (day instanceof Day) {
-      programs = this.getProgramsForDay(programs, day);
-    }
+    programs = this.getProgramsForDatetimeRange(programs, datetimeRange);
 
-    if (timeRange) {
-      programs = this.getProgramForTimeRange(programs, timeRange);
-    }
-
-    programs = this.filterShortPrograms(programs, 15);
+    programs = this.filterPrograms(programs, options);
 
     const groupedPrograms = this.groupByProgramsTitle(programs);
 
     return this.orderProgramsByStartTime(groupedPrograms);
   }
 
-  getProgramsForDay(programs: Program[], day: Day): Program[] {
-    return programs.filter(p =>
-      p.start.getDate() === day.getDayOfMonth() &&
-      p.start.getMonth() === day.getMonth() &&
-      p.start.getFullYear() === day.getFullYear()
-    );
-  }
-
-  getProgramForTimeRange(programs: Program[], timeRange: TimeRange): Program[] {
-    const [startHour, startMinute] = timeRange.start.split(":").map(Number);
-    const [endHour, endMinute] = timeRange.end.split(":").map(Number);
+  getProgramsForDatetimeRange(programs: Program[], dateTimeRange: DateTimeRange): Program[] {
+    const startLimit = dateTimeRange.start.getTime();
+    const endLimit = dateTimeRange.end.getTime();
 
     return programs.filter(p => {
-      const start = p.start;
-      const programTime = start.getHours() * 60 + start.getMinutes();
-      const startLimit = startHour * 60 + startMinute;
-      const endLimit = endHour * 60 + endMinute;
-
-      if (endLimit > startLimit) {
-        return programTime >= startLimit && programTime < endLimit;
-      }
-
-      return programTime >= startLimit || programTime < endLimit;
+      const programStart = p.start.getTime();
+      return programStart >= startLimit && programStart < endLimit;
     });
   }
 
-  filterShortPrograms(programs: Program[], minDurationMinutes = 10): Program[] {
+  filterPrograms(programs: Program[], options: FilterOptions): Program[] {
+    const { minDuration = 0, excludedTitles = [] } = options;
+    const excludedTitlesNormalized = excludedTitles.map(t => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase());
+
     return programs.filter(p => {
-      const duration = (p.stop.getTime() - p.start.getTime()) / 1000 / 60;
-      return duration > minDurationMinutes;
+      const durationInMinutes = (p.stop.getTime() - p.start.getTime()) / 1000 / 60;
+      if (minDuration > 0 && durationInMinutes <= minDuration) {
+        return false;
+      }
+
+      const programTitleNormalized = p.title.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      if (excludedTitlesNormalized.includes(programTitleNormalized)) {
+        return false;
+      }
+
+      return true;
     });
   }
 

@@ -5,6 +5,7 @@ import { XmlTvDownloader } from "./infrastructure/XmlTvDownloader.ts";
 import { Day } from "./domain/Day.ts";
 import { XmlTvChannelRepository } from "./infrastructure/XmlTvChannelRepository.ts";
 import { GetChannelUseCase } from "./application/GetChannelUseCase.ts";
+import { DateTimeRange } from "./domain/DateTimeRange.ts";
 
 const url = "https://xmltvfr.fr/xmltv/xmltv_tnt.xml.gz";
 const downloader = new XmlTvDownloader();
@@ -18,12 +19,19 @@ const channels = channelUseCase.execute({
 
 const programRepository = new XmlTvProgramRepository(xmlFile);
 const programUseCase = new GetProgramsUseCase(programRepository);
+const currentDay = new Day();
 channels.forEach((channel) => {
   console.log(`Get all programs for channel ${channel.name}`);
   const programs = programUseCase.execute({
-    day: new Day(),
-    timeRange: { start: "20:55", end: "00:00" },
-    channel: channel
+    channel: channel,
+    datetimeRange: new DateTimeRange(
+      currentDay.toDateTimeString(21, 0, 0),
+      currentDay.toDateTimeString(25, 0, 0), // `25` hours means next day at 01:00:00
+    ),
+    options: {
+      minDuration: 15,
+      excludedTitles: ["Tout beau, tout n9uf"]
+    }
   });
   channel.addProgram(programs);
 });

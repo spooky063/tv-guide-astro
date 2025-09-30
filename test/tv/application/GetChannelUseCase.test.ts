@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, test } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { GetChannelUseCase } from '../../../src/tv/application/GetChannelUseCase.ts';
 import { Channel } from '../../../src/tv/domain/Channel.ts';
 import { Program } from '../../../src/tv/domain/Program.ts';

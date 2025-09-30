@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, it, vi, test } from 'vitest';
 import { GetProgramsUseCase } from '../../../src/tv/application/GetProgramsUseCase.ts';
 import { Program } from '../../../src/tv/domain/Program.ts';
-import { Day } from '../../../src/tv/domain/Day.ts';
 import { Channel } from '../../../src/tv/domain/Channel.ts';
+import { DateTimeRange } from '../../../src/tv/domain/DateTimeRange.ts';
 
 describe("Get prime time programs", () => {
     let useCase: GetProgramsUseCase;
@@ -29,13 +29,13 @@ describe("Get prime time programs", () => {
             channel: "M6.fr",
             start: new Date("2025-09-12T21:10:00.000Z"),
             stop: new Date("2025-09-12T23:35:00.000Z"),
-            title: "Donjons & Dragons : L'honneur des voleurs"
+            title: "S.W.A.T"
         }),
         new Program({
             channel: "M6.fr",
             start: new Date("2025-09-12T23:35:00.000Z"),
             stop: new Date("2025-09-13T01:55:00.000Z"),
-            title: "La Petite Sirène"
+            title: "Tout beau, tout n9uf"
         })
     ];
     let repoMock: any;
@@ -54,49 +54,79 @@ describe("Get prime time programs", () => {
         repoMock.findByChannel.mockReturnValue(programs);
 
         const channel = new Channel({ sourceId: 1, id: channelId, name: "TF1", icon: "https://img.fake.jpg" });
-        const programUseCase = useCase.execute({ channel });
+        const programUseCase = useCase.execute({
+            channel: channel,
+            datetimeRange: new DateTimeRange("2025-09-11T00:00:00", "2025-09-12T23:59:59"),
+            options: {}
+        });
 
         expect(programUseCase).toHaveLength(2);
     });
 
     test.each([
-        { channelId: "M6.fr" , day: "2025-09-12", count: 2},
-        { channelId: "TF1.fr" , day: "2025-09-12", count: 1},
-        { channelId: "TF1.fr" , day: "2025-09-11", count: 1},
-        { channelId: "TF1.fr" , day: "2025-09-10", count: 0},
+        { channelId: "TF1.fr" , dateTimeRangeStart: "2025-09-11T21:00:00", dateTimeRangeEnd: "2025-09-12T00:00:00", count: 0},
+        { channelId: "TF1.fr" , dateTimeRangeStart: "2025-09-11T15:00:00", dateTimeRangeEnd: "2025-09-11T18:00:00", count: 1},
+        { channelId: "TF1.fr" , dateTimeRangeStart: "2025-09-12T21:00:00", dateTimeRangeEnd: "2025-09-12T23:00:00", count: 1},
+        { channelId: "M6.fr" , dateTimeRangeStart: "2025-09-12T21:00:00", dateTimeRangeEnd: "2025-09-13T00:00:00", count: 2},
+        { channelId: "M6.fr" , dateTimeRangeStart: "2025-09-12T19:00:00", dateTimeRangeEnd: "2025-09-13T00:00:00", count: 3},
     ])(
-        "should get $count programs by channel $channelId for day $day",
-        async ({ channelId, day, count }) => {
+        "should get $count programs by channel $channelId for day $dateTimeRangeStart - $dateTimeRangeEnd",
+        async ({ channelId, dateTimeRangeStart, dateTimeRangeEnd, count }) => {
             const programs = fakePrograms.filter((p) => p.channel === channelId)
             repoMock.findByChannel.mockReturnValue(programs);
 
             const channel = new Channel({ sourceId: 1, id: channelId, name: "name", icon: "https://img.fake.jpg" });
-            const programUseCase = useCase.execute({ channel, day: new Day(day) });
+            const programUseCase = useCase.execute({
+                channel: channel,
+                datetimeRange: new DateTimeRange(dateTimeRangeStart, dateTimeRangeEnd),
+                options: {}
+            });
 
             expect(programUseCase).toHaveLength(count);
         }
     );
 
     test.each([
-        { channelId: "TF1.fr" , day: "2025-09-11", startRange: "21:00", endRange: "00:00", count: 0},
-        { channelId: "TF1.fr" , day: "2025-09-11", startRange: "15:00", endRange: "18:00", count: 1},
-        { channelId: "TF1.fr" , day: "2025-09-12", startRange: "21:00", endRange: "23:00", count: 1},
-        { channelId: "M6.fr" , day: "2025-09-12", startRange: "21:00", endRange: "00:00", count: 2},
-        { channelId: "M6.fr" , day: "2025-09-12", startRange: "19:00", endRange: "00:00", count: 2},
+        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-12T23:30:00.000Z", expectedCount: 2 },
+        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-13T01:00:00.000Z", expectedCount: 3 },
+        { dateStart: "2025-09-12T09:00:00.000Z", dateEnd: "2025-09-12T12:00:00.000Z", expectedCount: 0 },
     ])(
-        "should get $count programs by channel $channelId for day $day and time range $startRange - $endRange",
-        async ({ channelId, day, startRange, endRange, count }) => {
-            const programs = fakePrograms.filter((p) => p.channel === channelId)
-            repoMock.findByChannel.mockReturnValue(programs);
+        "should get $expected programs for DateTimeRange $dateStart - $dateEnd",
+        ({ dateStart, dateEnd, expectedCount }) => {
+            const programsForDateTimeRange = useCase.getProgramsForDatetimeRange(
+                fakePrograms,
+                new DateTimeRange(dateStart, dateEnd)
+            );
 
-            const channel = new Channel({ sourceId: 1, id: channelId, name: "name", icon: "https://img.fake.jpg" });
-            const programUseCase = useCase.execute({
-                channel,
-                day: new Day(day),
-                timeRange: { start: startRange, end: endRange }
-            });
+            expect(programsForDateTimeRange).toHaveLength(expectedCount);
+        }
+    );
 
-            expect(programUseCase).toHaveLength(count);
+    test.each([
+        {'minDurationinMinutes': 10, 'expectedCount': 4},
+        {'minDurationinMinutes': 120, 'expectedCount': 2},
+        {'minDurationinMinutes': 180, 'expectedCount': 0},
+    ])(
+        "should filter programs by duration $minDurationinMinutes",
+        ({ minDurationinMinutes, expectedCount }) => {
+            const filteredPrograms = useCase.filterPrograms(fakePrograms, { minDuration: minDurationinMinutes });
+
+            expect(filteredPrograms).toHaveLength(expectedCount);
+        }
+    );
+
+    test.each([
+        {'excludedTitles': ["L'internat de la honte"], 'expectedCount': 4},
+        {'excludedTitles': ["S.W.A.T"], 'expectedCount': 3},
+        {'excludedTitles': ["S.W.A.T", "L'internat de la honte"], 'expectedCount': 2},
+        {'excludedTitles': ["meteo"], 'expectedCount': 4},
+        {'excludedTitles': ["Tout beau, tout n9uf"], 'expectedCount': 4},
+    ])(
+        "should filter programs by excludedTitles $excludedTitles",
+        ({ excludedTitles, expectedCount }) => {
+            const filteredPrograms = useCase.filterPrograms(fakePrograms, { excludedTitles });
+
+            expect(filteredPrograms).toHaveLength(expectedCount);
         }
     );
 

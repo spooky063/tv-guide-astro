@@ -25,4 +25,10 @@ export class Day {
     getFullYear(): number {
         return this.date.getFullYear();
     }
+
+    toDateTimeString(hours = 0, minutes = 0, seconds = 0): string {
+        const d = new Date(this.date);
+        d.setHours(hours, minutes, seconds, 0);
+        return d.toISOString().slice(0,19);
+    }
 }
