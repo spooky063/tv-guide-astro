@@ -33,7 +33,7 @@ export class GetProgramsUseCase {
       programs = this.getProgramForTimeRange(programs, timeRange);
     }
 
-    programs = this.filterShortPrograms(programs);
+    programs = this.filterShortPrograms(programs, 15);
 
     const groupedPrograms = this.groupByProgramsTitle(programs);
 
