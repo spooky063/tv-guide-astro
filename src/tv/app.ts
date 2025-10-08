@@ -30,7 +30,7 @@ channels.forEach((channel) => {
     ),
     options: {
       minDuration: 15,
-      excludedTitles: ["Tout beau, tout n9uf"]
+      excludedTitles: ["Tout beau, tout n9uf", "TBT9"]
     }
   });
   channel.addProgram(programs);
