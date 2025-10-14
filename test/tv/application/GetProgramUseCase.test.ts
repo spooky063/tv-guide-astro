@@ -93,11 +93,11 @@ describe("Get prime time programs", () => {
     );
 
     test.each([
-        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-12T23:30:00.000Z", expectedCount: 3 },
-        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-13T01:00:00.000Z", expectedCount: 4 },
+        { dateStart: "2025-09-12T21:30:00.000Z", dateEnd: "2025-09-12T23:30:00.000Z", expectedCount: 3 },
+        { dateStart: "2025-09-12T21:30:00.000Z", dateEnd: "2025-09-13T01:00:00.000Z", expectedCount: 4 },
         { dateStart: "2025-09-12T09:00:00.000Z", dateEnd: "2025-09-12T12:00:00.000Z", expectedCount: 0 },
     ])(
-        "should get $expected programs for DateTimeRange $dateStart - $dateEnd",
+        "should get $expectedCount programs for DateTimeRange $dateStart - $dateEnd",
         ({ dateStart, dateEnd, expectedCount }) => {
             const programsForDateTimeRange = useCase.getProgramsForDatetimeRange(
                 fakePrograms,
@@ -107,6 +107,36 @@ describe("Get prime time programs", () => {
             expect(programsForDateTimeRange).toHaveLength(expectedCount);
         }
     );
+
+    it('should get all programs even small one for DateTimeRange', () => {
+        const programs = [
+            new Program({
+                channel: "TF1.fr",
+                start: new Date("2025-09-12T18:00:00.000Z"),
+                stop: new Date("2025-09-12T21:25:00.000Z"),
+                title: "Programme 1"
+            }),
+            new Program({
+                channel: "Gulli.fr",
+                start: new Date("2025-09-12T21:00:00.000Z"),
+                stop: new Date("2025-09-12T21:25:00.000Z"),
+                title: "Malcolm",
+            }),
+            new Program({
+                channel: "Gulli.fr",
+                start: new Date("2025-09-12T21:25:00.000Z"),
+                stop: new Date("2025-09-12T21:50:00.000Z"),
+                title: "Malcolm",
+            }),
+        ];
+
+        const programsForDateTimeRange = useCase.getProgramsForDatetimeRange(
+            programs,
+            new DateTimeRange("2025-09-12T21:30:00.000Z", "2025-09-13T01:00:00.000Z")
+        );
+
+        expect(programsForDateTimeRange).toHaveLength(2);
+    });
 
     test.each([
         {'minDurationinMinutes': 10, 'expectedCount': 5},

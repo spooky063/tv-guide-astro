@@ -38,9 +38,21 @@ export class GetProgramsUseCase {
     const startLimit = dateTimeRange.start.getTime();
     const endLimit = dateTimeRange.end.getTime();
 
+    const MS_PER_MINUTE = 60000;
+    const startLimitMinus30Minutes = new Date(startLimit - 30 * MS_PER_MINUTE).getTime();
+
     return programs.filter(p => {
       const programEnd = p.stop.getTime();
       const programStart = p.start.getTime();
+      const programDuration = programEnd - programStart;
+
+      if (programDuration < 30 * MS_PER_MINUTE
+          && programStart >= startLimitMinus30Minutes
+          && startLimit >= programEnd
+      ) {
+          return true;
+      }
+
       return programEnd > startLimit && programStart < endLimit;
     });
   }
