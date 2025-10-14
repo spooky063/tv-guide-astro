@@ -25,12 +25,12 @@ channels.forEach((channel) => {
   const programs = programUseCase.execute({
     channel: channel,
     datetimeRange: new DateTimeRange(
-      currentDay.toDateTimeString(21, 0, 0),
+      currentDay.toDateTimeString(21, 30, 0),
       currentDay.toDateTimeString(25, 0, 0), // `25` hours means next day at 01:00:00
     ),
     options: {
       minDuration: 15,
-      excludedTitles: ["Tout beau, tout n9uf", "TBT9"]
+      excludedTitles: ["Tout beau, tout n9uf", "TBT9", "Meteo"]
     }
   });
   channel.addProgram(programs);

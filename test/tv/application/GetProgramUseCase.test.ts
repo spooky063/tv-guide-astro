@@ -36,7 +36,13 @@ describe("Get prime time programs", () => {
             start: new Date("2025-09-12T23:35:00.000Z"),
             stop: new Date("2025-09-13T01:55:00.000Z"),
             title: "Tout beau, tout n9uf"
-        })
+        }),
+        new Program({
+            channel: "L'equipe.fr",
+            start: new Date("2025-09-12T20:30:00.000Z"),
+            stop: new Date("2025-09-12T22:45:00.000Z"),
+            title: "Football"
+        }),
     ];
     let repoMock: any;
 
@@ -87,8 +93,8 @@ describe("Get prime time programs", () => {
     );
 
     test.each([
-        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-12T23:30:00.000Z", expectedCount: 2 },
-        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-13T01:00:00.000Z", expectedCount: 3 },
+        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-12T23:30:00.000Z", expectedCount: 3 },
+        { dateStart: "2025-09-12T21:00:00.000Z", dateEnd: "2025-09-13T01:00:00.000Z", expectedCount: 4 },
         { dateStart: "2025-09-12T09:00:00.000Z", dateEnd: "2025-09-12T12:00:00.000Z", expectedCount: 0 },
     ])(
         "should get $expected programs for DateTimeRange $dateStart - $dateEnd",
@@ -103,8 +109,8 @@ describe("Get prime time programs", () => {
     );
 
     test.each([
-        {'minDurationinMinutes': 10, 'expectedCount': 4},
-        {'minDurationinMinutes': 120, 'expectedCount': 2},
+        {'minDurationinMinutes': 10, 'expectedCount': 5},
+        {'minDurationinMinutes': 120, 'expectedCount': 3},
         {'minDurationinMinutes': 180, 'expectedCount': 0},
     ])(
         "should filter programs by duration $minDurationinMinutes",
@@ -116,11 +122,11 @@ describe("Get prime time programs", () => {
     );
 
     test.each([
-        {'excludedTitles': ["L'internat de la honte"], 'expectedCount': 4},
-        {'excludedTitles': ["S.W.A.T"], 'expectedCount': 3},
-        {'excludedTitles': ["S.W.A.T", "L'internat de la honte"], 'expectedCount': 2},
-        {'excludedTitles': ["meteo"], 'expectedCount': 4},
-        {'excludedTitles': ["Tout beau, tout n9uf"], 'expectedCount': 4},
+        {'excludedTitles': ["L'internat de la honte"], 'expectedCount': 5},
+        {'excludedTitles': ["S.W.A.T"], 'expectedCount': 4},
+        {'excludedTitles': ["S.W.A.T", "L'internat de la honte"], 'expectedCount': 3},
+        {'excludedTitles': ["meteo"], 'expectedCount': 5},
+        {'excludedTitles': ["Tout beau, tout n9uf"], 'expectedCount': 5},
     ])(
         "should filter programs by excludedTitles $excludedTitles",
         ({ excludedTitles, expectedCount }) => {

@@ -39,8 +39,9 @@ export class GetProgramsUseCase {
     const endLimit = dateTimeRange.end.getTime();
 
     return programs.filter(p => {
+      const programEnd = p.stop.getTime();
       const programStart = p.start.getTime();
-      return programStart >= startLimit && programStart < endLimit;
+      return programEnd > startLimit && programStart < endLimit;
     });
   }
 
