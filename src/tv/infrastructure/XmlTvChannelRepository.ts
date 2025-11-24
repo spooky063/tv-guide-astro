@@ -22,7 +22,14 @@ export class XmlTvChannelRepository {
       const id = c.getAttribute("id") ?? "";
       const sourceId = this.mappedChannelSourceId(id) ?? index + 1;
       const channelName = xpath.select1("string(./display-name)", c) as string;
-      const icon = (xpath.select1("./icon", channel) as Element | null)?.getAttribute("src") ?? "";
+      let icon = (xpath.select1("./icon", channel) as Element | null)?.getAttribute("src") ?? "";
+
+      if (icon.startsWith("https://focus.telerama.fr/")) {
+        icon = icon.replace("500x500", "26x26");
+      }
+      if (icon.startsWith("https://static.teleboy.ch/")) {
+        icon = icon.replace("icon320_light", "icon40_light");
+      }
 
       return new Channel({
         sourceId: sourceId,

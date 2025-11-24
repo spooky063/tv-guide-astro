@@ -14,9 +14,7 @@ const { sourceId, name, icon, programs } = Astro.props.channel;
     <p class="flex flex-col items-center text-[10px] text-fg-muted mb-2">
       N°{sourceId}
     </p>
-    <object data={icon} class="w-[26px] object-contain mb-4">
-      <img src="https://placehold.co/40x40?text=None" />
-    </object>
+    <img src={icon} alt="" class="w-[26px] object-contain mb-4 pointer-events-none" loading="lazy"/>
     <small class="text-center text-[11px] text-fg-muted font-light">{name}</small>
   </div>
   <div
