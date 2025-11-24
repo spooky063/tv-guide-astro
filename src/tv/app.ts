@@ -14,7 +14,8 @@ const xmlFile = await downloader.downloadToFile(url, "./var/downloads/xmltv_tnt.
 const channelRepository = new XmlTvChannelRepository(xmlFile);
 const channelUseCase = new GetChannelUseCase(channelRepository);
 const channels = channelUseCase.execute({
-  excludeChannels: ['CanalPlus.fr', 'ParisPremiere.fr', 'CanalPlusSport.fr', 'CanalPlusCinema.fr', 'PlanetePlus.fr', 'BFMTV.fr', 'CNews.fr', 'LaChaineParlementaire.fr', 'LCI.fr', 'FranceInfo.fr']
+  includeChannels: ['TF1.fr', 'France2.fr', 'France3.fr', 'France4.fr', 'France5.fr', 'M6.fr', 'Arte.fr', 'W9.fr', 'TMC.fr', 'NT1.fr', 'Gulli.fr', 'CStar.fr', 'T18.fr', 'NOVO19.fr', 'TF1SeriesFilms.fr', 'LEquipe21.fr', '6ter.fr', 'Numero23.fr', 'RMCDecouverte.fr', 'Cherie25.fr'],
+  //excludeChannels: ['CanalPlus.fr', 'ParisPremiere.fr', 'CanalPlusSport.fr', 'CanalPlusCinema.fr', 'PlanetePlus.fr', 'BFMTV.fr', 'CNews.fr', 'LaChaineParlementaire.fr', 'LCI.fr', 'FranceInfo.fr']
 });
 
 const programRepository = new XmlTvProgramRepository(xmlFile);

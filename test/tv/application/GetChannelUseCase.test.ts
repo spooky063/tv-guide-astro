@@ -49,12 +49,14 @@ describe("Get channels", () => {
     it('should add program to channel TF1.fr', () => {
         fakeChannels[0].addProgram(
             [
-                new Program({
-                    channel: "TF1.fr",
-                    start: new Date("2025-09-11T21:00:00.000Z"),
-                    stop: new Date("2025-09-11T23:35:00.000Z"),
-                    title: "Doctor Strange"
-                })
+                [
+                    new Program({
+                        channel: "TF1.fr",
+                        start: new Date("2025-09-11T21:00:00.000Z"),
+                        stop: new Date("2025-09-11T23:35:00.000Z"),
+                        title: "Doctor Strange"
+                    })
+                ]
             ]
         );
 

@@ -22,7 +22,7 @@ describe("Get programs", () => {
         expect(programs[1].categories).toHaveLength(2);
         expect(programs[1].categories?.[0]).toBe("XY");
         expect(programs[1].categories?.[1]).toBe("Téléréalité");
-        expect(programs[1].image).toBe("https://img.bouygtel.fr/CMS/images/0CBCF4884996A3C3C0CFF35863F4F383.jpg");
+        expect(programs[1].image).toBe("https://images.weserv.nl/?url=https://img.bouygtel.fr/CMS/images/0CBCF4884996A3C3C0CFF35863F4F383.jpg&w=65&h=90&fit=cover&output=webp&q=55&maxage=1d&default=placehold.co/65x90?text=None");
         expect(programs[1].rating?.system).toBe("CSA");
         expect(programs[1].rating?.value).toBe("-12");
         expect(programs[1].rating?.icon).toBe("https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Moins12.svg/200px-Moins12.svg.png");
