@@ -60,7 +60,7 @@ export class XmlTvProgramRepository {
       const country = xpath.select1("string(./country)", p) as string;
 
       const image = (xpath.select1("./icon", p) as Element | null)?.getAttribute("src") ?? undefined;
-      const imageQuality = 55;
+      const imageQuality = 65;
 
       return new Program({
         channel: p.getAttribute("channel") as string,
