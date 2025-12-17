@@ -21,7 +21,7 @@ const key = Astro.props.key;
   data-categories={categories?.join(" ")}
 >
   <div class="flex flex-col">
-    <img src={image} alt="" class="w-[65px] h-[90px] object-cover rounded-md pointer-events-none" loading="lazy"/>
+    <img src={image} onerror="this.onerror=null;this.src='https://placehold.co/65x90?text=None'" alt="" width="65" height="90" class="w-[65px] h-[90px] object-cover rounded-md pointer-events-none" loading="lazy"/>
     <slot name="progress" />
   </div>
   <div class="flex flex-col mr-[4px] -order-1">

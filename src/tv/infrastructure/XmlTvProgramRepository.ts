@@ -59,9 +59,6 @@ export class XmlTvProgramRepository {
 
       const country = xpath.select1("string(./country)", p) as string;
 
-      const image = (xpath.select1("./icon", p) as Element | null)?.getAttribute("src") ?? undefined;
-      const imageQuality = 65;
-
       return new Program({
         channel: p.getAttribute("channel") as string,
         start: parseDateTime(p.getAttribute("start") ?? ""),
@@ -69,7 +66,7 @@ export class XmlTvProgramRepository {
         title: xpath.select1("string(./title[@lang='fr'])", p) as string,
         subTitle: xpath.select1("string(./sub-title[@lang='fr'])", p) as string,
         description: xpath.select1("string(./desc[@lang='fr'])", p) as string,
-        image: `https://images.weserv.nl/?url=${image}&w=65&h=90&fit=cover&output=webp&q=${imageQuality}&maxage=1d&default=placehold.co/65x90?text=None`,
+        image: (xpath.select1("./icon", p) as Element | null)?.getAttribute("src") ?? undefined,
         categories: (xpath.select("./category", p) as Element[]).map((catNode) => catNode.textContent ?? ""),
         date: date ? parseDate(date) : undefined,
         country: country ? dn.of(country) : undefined,
