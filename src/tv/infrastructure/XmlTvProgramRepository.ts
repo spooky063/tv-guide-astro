@@ -56,6 +56,14 @@ export class XmlTvProgramRepository {
       const creditsGrouped: Partial<Record<CreditType, Credit[]>> = Object.groupBy(credits, ({ creditType }) => creditType as CreditType);
 
       const date = xpath.select1("string(./date)", p) as string;
+      let dateValue: Date | string | undefined = undefined;
+      if (date.length === 4) {
+        dateValue = date;
+      } else if (date.length > 4) {
+        dateValue = parseDate(date);
+      } else {
+        dateValue = undefined;
+      }
 
       const country = xpath.select1("string(./country)", p) as string;
 
@@ -68,8 +76,8 @@ export class XmlTvProgramRepository {
         description: xpath.select1("string(./desc[@lang='fr'])", p) as string,
         image: (xpath.select1("./icon", p) as Element | null)?.getAttribute("src") ?? undefined,
         categories: (xpath.select("./category", p) as Element[]).map((catNode) => catNode.textContent ?? ""),
-        date: date ? parseDate(date) : undefined,
-        country: country ? dn.of(country) : undefined,
+        date: dateValue,
+        country: undefined,
         rating,
         tvShow,
         credits: creditsGrouped,

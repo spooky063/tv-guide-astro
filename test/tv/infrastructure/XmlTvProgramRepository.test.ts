@@ -68,4 +68,18 @@ describe("Get programs", () => {
         expect(program.date).toStrictEqual(new Date("1990-10-11"));
         expect(program.country).toBe("Espagne");
     });
+
+    it('should transform multiple date format', () => {
+        const repository = new XmlTvProgramRepository(fakePrograms);
+
+        const TF1 = repository.findByChannel(
+            new Channel({ sourceId: 1, id: "TF1.fr", name: "TF1", icon: "https://img.fake.jpg" }),
+        );
+        expect(TF1[0].date).toStrictEqual(new Date("1990-10-11"));
+
+        const France2 = repository.findByChannel(
+            new Channel({ sourceId: 2, id: "France2.fr", name: "France 2", icon: "https://img.fake2.jpg" }),
+        );
+        expect(France2[0].date).toStrictEqual('2016');
+    });
 });

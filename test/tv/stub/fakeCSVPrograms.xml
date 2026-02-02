@@ -9,6 +9,8 @@
         <rating system="CSA">
             <value>Tout public</value>
         </rating>
+        <date>2016</date>
+        <country lang="fr">France</country>
     </programme>
     <programme start="20250901065500 +0200" stop="20250901100000 +0200" channel="TF1.fr">
         <title lang="en">Good Morning ! The morning TF1</title>
@@ -56,5 +58,6 @@
             <icon
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Moins12.svg/200px-Moins12.svg.png" />
         </rating>
+        <country lang="fr">France - Allemagne - Taïwan - Canada</country>
     </programme>
 </tv>

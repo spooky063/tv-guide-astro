@@ -10,7 +10,7 @@ export interface ProgramProps {
   subTitle?: string;
   description?: string;
   categories?: string[];
-  date?: Date;
+  date?: Date|string;
   country?: string;
   image?: string;
   rating?: Rating;
@@ -26,7 +26,7 @@ export class Program {
   subTitle?: string;
   description?: string;
   categories?: string[];
-  date?: Date;
+  date?: Date|string;
   country?: string;
   image?: string;
   rating?: Rating;
