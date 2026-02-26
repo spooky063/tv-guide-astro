@@ -66,7 +66,6 @@ describe("Get programs", () => {
         expect(program.credits?.composer).toHaveLength(1);
         expect(program.credits?.composer?.[0]?.name).toBe("David Bateman");
         expect(program.date).toStrictEqual(new Date("1990-10-11"));
-        expect(program.country).toBe("Espagne");
     });
 
     it('should transform multiple date format', () => {

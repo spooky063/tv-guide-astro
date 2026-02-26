@@ -37,9 +37,9 @@ export class Program {
     const { channel, start, stop, title, subTitle, description, date, country, categories, image, rating, tvShow, credits } = props;
 
     if (!channel) throw new Error("Program must have a channel");
-    if (!title) throw new Error("Program must have a title");
+    if (!title) throw new Error(`Program from ${channel} at ${start} must have a title`);
     if (!(start instanceof Date) || !(stop instanceof Date)) {
-      throw new Error("Program must have valid dates");
+      throw new Error(`Program name ${title} from ${channel} must have valid dates`);
     }
 
     this.channel = channel;

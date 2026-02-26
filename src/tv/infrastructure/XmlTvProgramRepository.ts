@@ -19,11 +19,15 @@ export class XmlTvProgramRepository {
     const content = fs.readFileSync(this.filePath, "utf-8");
     const doc = new DOMParser().parseFromString(content, "text/xml");
 
-    const dn = new Intl.DisplayNames(['fr'], { type: 'region' });
+    //const dn = new Intl.DisplayNames(['fr'], { type: 'region' });
 
     const programs: Node[]  = xpath.select(`//programme[@channel='${channel.id}']`, doc) as Node[];
 
-    return programs.map((program) => {
+    return programs.filter((program) => {
+      const title = xpath.select1("string(./title[@lang='fr'])", program as Element) as string;
+      return !!title;
+    })
+      .map((program) => {
       const p = program as Element;
 
       const ratingNode = xpath.select1("./rating", p) as Element | null;
@@ -64,8 +68,6 @@ export class XmlTvProgramRepository {
       } else {
         dateValue = undefined;
       }
-
-      const country = xpath.select1("string(./country)", p) as string;
 
       return new Program({
         channel: p.getAttribute("channel") as string,
